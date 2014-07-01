@@ -1,0 +1,20 @@
+function dirtoupper() 
+{ 
+if [ -d \"$1\" ];then 
+uppername=`echo \"$1\"|tr [a-z] [A-Z]` 
+if [ ! -e \"$uppername\" ];then 
+mv \"$1\" \"$uppername\" 
+fi 
+
+for each in $uppername/* 
+do 
+#echo $each 
+if [ -f \"$each\" ];then 
+uppername2=`echo \"$each\"|tr [a-z] [A-Z]` 
+if [ ! -e \"$uppername2\" ];then 
+mv \"$each\" \"$uppername2\" 
+fi 
+elif [ -d \"$each\" ];then 
+dirtoupper \"$each\" 
+fi 
+done
