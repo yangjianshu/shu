@@ -1,0 +1,60 @@
+shu
+===
+#include<sys/types.h>    
+#include<sys/socket.h>
+#include<stdio.h>
+#include<netinet/in.h>
+#include<arpa/inet.h>
+#include<unistd.h>   
+
+   int main()
+  { int sockfd;
+    int len;
+    struct sockaddr_in address;
+    int result;
+    char ch = `A`;
+    sockfd = socket(AF_INET,SOCK_STREAM,0);       address.sin_family = AF_INET;       
+   address.sin_addr.s_addr = inet_addr(“127.0.0.1”);
+   address.sin_port = 9734;
+   len = sizeof(address); 
+
+   result = connect(sockfd,(struct sockaddr *)&address,len);
+              if(result == -1) {
+     peror(“oops:client1”);
+     exit(1); }
+     write(sockfd,&ch,1); 
+     read(sockfd,&ch,1);
+     printf(“char from server = c\n”,ch);
+     close(sockfd);
+     exit(0); }  
+#include<sys/types.h>                        
+#include<sys/socket.h>
+#include<stdio.h>
+#include<netinet/in.h>
+#include<arpa/inet.h>
+#include<unistd.h>   
+
+int main()
+{  int server_sockfd,client_sockfd;
+   int server_len,client_len;
+   struct sockaddr_in server_address;
+   struct sockaddr_in client_address;
+ 
+   server_sockfd = socket(AF_INET,SOCK_STEAM,0);
+   server_address.sun_family = AF_INET;
+   server_address.sin_addr.s_addr = inet_addr(“127.0.0.1”);
+   server_address.sin_port = 9734;
+   server_len = sizeof(server_address);
+   bind(server_sockfd,(struct sockaddr *)&server_address,server_len); 
+   
+   listen(server_sockfd,5);
+   while(1){
+       char ch;
+       printf(‘server waiting\n”);
+       client_len = sizeof(client_address);                client_sockfd = accept(server_sockfd,(struct sockaddr*）
+&client_address,&client_len);
+     
+       read(client_sockfd,&ch,1);      
+          ch++;
+       write(client_sockfd,&ch,1);
+       close(client_sockfd);}
